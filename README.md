@@ -2,6 +2,8 @@
 
 Read a random subset of a text file in an efficient manner.
 
+## use
+
 ```python
 from randomread import sample
 
@@ -12,4 +14,10 @@ text = sample("large_textfile.txt", 10)
 ```python
 # Read 100 randomly picked 2000-word chunks
 text = sample("large_textfile.txt", 200000, chunk_size=2000)
+```
+
+## install
+
+```bash
+pip install randomread
 ```
