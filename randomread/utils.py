@@ -2,7 +2,7 @@ from pathlib import Path
 import random
 from math import ceil
 
-def sample(path, no_words, chunk_size=50000, word_len_estimate=10):
+def sample(path, no_words, chunk_size=5000, word_len_estimate=10):
     """
     Sample text chunks from a .txt file
 
@@ -14,10 +14,10 @@ def sample(path, no_words, chunk_size=50000, word_len_estimate=10):
     file_len_bytes = file_stats.st_size
     print(file_len_bytes)
     
-    chunks = ceil(no_words * word_len_estimate / chunk_size)
+    chunks = ceil(no_words / chunk_size)
     print(f"Generate {chunks} chunks")
     
-    chunks = [random.randint(0, file_len_bytes-chunk_size) for _ in range(chunks)]
+    chunks = [random.randint(0, file_len_bytes - chunk_size * word_len_estimate) for _ in range(chunks)]
     chunks = sorted(chunks)
 
     f = filepath.open("rb")    
@@ -26,11 +26,12 @@ def sample(path, no_words, chunk_size=50000, word_len_estimate=10):
         print(f"Current position in file {current_pos}")
         f.seek(chunk)
         print(f"Go to {chunk}. Current position in file {f.tell()}")
-        current_bytes = f.read(chunk_size)
+        current_bytes = f.read(chunk_size * word_len_estimate)
         current_text = current_bytes.decode("utf-8")
         current_text = current_text.split()
         current_text = current_text[1:]
         current_text = current_text[:-1]
+        current_text = current_text[:chunk_size]
         current_text = " ".join(current_text)
         texts.append(current_text)
     f.close()
